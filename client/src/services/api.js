@@ -1,7 +1,9 @@
-const BASE_URL = import.meta.env.VITE_API_URL || "/api";
+const rawUrl = import.meta.env.VITE_API_URL || "/api";
+const BASE_URL = rawUrl.endsWith("/") ? rawUrl.slice(0, -1) : rawUrl;
 
 async function request(endpoint, options = {}) {
-  const url = `${BASE_URL}${endpoint}`;
+  const formattedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
+  const url = `${BASE_URL}${formattedEndpoint}`;
   const config = {
     headers: { "Content-Type": "application/json" },
     ...options,
