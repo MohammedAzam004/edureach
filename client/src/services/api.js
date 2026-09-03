@@ -42,9 +42,14 @@ async function request(endpoint, options = {}) {
   } else {
     const text = await response.text();
     if (!response.ok) {
+      if (response.status === 405) {
+        throw new Error(
+          "Error 405 (Method Not Allowed): The request was sent to Vercel instead of Render. Please set VITE_API_URL in Vercel (Project Settings → Environment Variables) to your Render backend URL (e.g. https://xxx.onrender.com) and click Redeploy."
+        );
+      }
       if (response.status === 502 || response.status === 503 || response.status === 504) {
         throw new Error(
-          "Backend is currently waking up or starting on Render. Please wait ~30 seconds and send your message again."
+          "Backend is currently waking up or starting on Render (free tier takes ~30–50s). Please wait a moment and try again."
         );
       }
       throw new Error(text.slice(0, 150) || `Server error (${response.status})`);
@@ -53,7 +58,17 @@ async function request(endpoint, options = {}) {
   }
 
   if (!response.ok) {
-    throw new Error(data.message || data.error || "Request failed");
+    if (response.status === 405) {
+      throw new Error(
+        "Error 405: Request routed to Vercel. Set VITE_API_URL to your Render backend URL in Vercel and redeploy."
+      );
+    }
+    if (response.status === 503 || response.status === 502) {
+      throw new Error(
+        "Service Unavailable: Render backend is waking up or deploying. Please wait ~30-50 seconds and retry."
+      );
+    }
+    throw new Error(data.message || data.error || `Request failed (${response.status})`);
   }
 
   return data;
