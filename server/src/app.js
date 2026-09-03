@@ -31,12 +31,17 @@ app.get("/", (req, res) => {
   res.json({ success: true, message: "EduReach Chatbot API is running", timestamp: new Date().toISOString() });
 });
 
+app.get("/health", (req, res) => {
+  res.json({ status: "healthy", timestamp: new Date().toISOString() });
+});
+
 app.get("/api/health", (req, res) => {
   res.json({ status: "healthy", timestamp: new Date().toISOString() });
 });
 
-// Routes
+// Routes (support both /api/chat and /chat so any frontend baseUrl structure works)
 app.use("/api/chat", chatRoutes);
+app.use("/chat", chatRoutes);
 
 // 404
 app.use((req, res) => {

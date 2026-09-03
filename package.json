@@ -1,0 +1,12 @@
+{
+  "name": "edureach-agentic-chatbot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "EduReach Agentic College Intelligence Platform",
+  "scripts": {
+    "start": "npm --prefix server start",
+    "build": "npm --prefix server install",
+    "client:build": "npm --prefix client run build",
+    "server:start": "npm --prefix server start"
+  }
+}
