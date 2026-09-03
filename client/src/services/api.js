@@ -5,7 +5,8 @@ if (!rawUrl) {
   if (typeof window !== "undefined" && window.location.hostname === "localhost") {
     rawUrl = "http://localhost:5000/api";
   } else {
-    rawUrl = "/api";
+    // Default production Render backend fallback
+    rawUrl = "https://edureach-h4ox.onrender.com/api";
   }
 }
 
