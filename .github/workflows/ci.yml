@@ -9,6 +9,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      statuses: write
+      actions: read
 
     steps:
       - uses: actions/checkout@v4
@@ -26,3 +30,10 @@ jobs:
       - name: Install backend
         working-directory: server
         run: npm install
+
+      - name: 'notify vercel'
+        if: always()
+        uses: 'vercel/repository-dispatch/actions/status@v1'
+        with:
+          name: Vercel - edureach
+          github_token: ${{ secrets.GITHUB_TOKEN }}
